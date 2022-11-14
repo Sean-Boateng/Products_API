@@ -53,6 +53,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'product_project.urls'
 
+
+REST_FRAMEWORK= {
+    'COERCE_DECIMAL_TO_STRING': False 
+}
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
