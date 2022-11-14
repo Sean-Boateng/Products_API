@@ -1,5 +1,4 @@
-
-from itertools import product
+from django.shortcuts import get_object_or_404
 from django.http import response
 from rest_framework.decorators import api_view
 from rest_framework import status
@@ -35,16 +34,24 @@ def products_list(request):
 
 
 
-# @api_view(['GET'])
-# def product_detail(request,pk):
-#     try:
-#         product = Product.objects.get(pk=pk)
-#         serializer = ProductSerializer(product)
-#         return Response(serializer.data)
+@api_view(['GET', 'PUT', 'DELETE'])
+def product_detail(request,pk):
+    
+    if request.method == 'GET':
+        product = get_object_or_404(Product,pk=pk)
+        serializer = ProductSerializer(product)
+        return Response(serializer.data)
+    elif request.method =='PUT':
+         product = get_object_or_404(Product,pk=pk)
+         serializer = ProductSerializer(product, data = request.data)
+         serializer.is_valid(raise_exception=True)
+         serializer.save()
+         return Response(serializer.data)
+    elif request.method == 'DELETE':
+        product = get_object_or_404(Product,pk=pk)
+        product.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
-#     except Product.DoesNotExist:
-#         return Response(status=status.HTTP_404_NOT_FOUND)
-        
 
 
 
